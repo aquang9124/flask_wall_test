@@ -40,7 +40,7 @@ def create():
 def show():
 	query = "SELECT users.username, messages.message, messages.id as message_id, messages.created_at as posted_date FROM users JOIN messages ON users.id = messages.user_id WHERE users.id = '{}'".format(session['user_id'])
 	messages = mysql.fetch(query)
-	query2 = "SELECT users.username, comments.comment, comments.created_at, comments.id as comment_id FROM users JOIN messages ON users.id = messages.user_id JOIN comments ON messages.id = comments.message_id WHERE users.id = '{}'".format(session['user_id'])
+	query2 = "SELECT users.username, comments.comment, comments.created_at, comments.id as comment_id, comments.message_id as parent_id FROM users JOIN messages ON users.id = messages.user_id JOIN comments ON messages.id = comments.message_id WHERE users.id = '{}' AND comments.message_id = messages.id".format(session['user_id'])
 	comments = mysql.fetch(query2)
 	return render_template('wall.html', messages=messages, comments=comments)
 # This route takes you to a function that logs you in

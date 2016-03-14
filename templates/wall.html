@@ -42,13 +42,15 @@
 							{% if comments %}
 							<ul>
 							{% for comment in comments %}
+								{% if comment.parent_id == message.message_id %}
 								<li>
 									<p>{{ comment.username }} - {{ comment.created_at }}</p>
 									<p>{{ comment.comment }}</p>
 								</li>
+								{% endif %}
 							{% endfor %}
 							</ul>
-						{% endif %}
+							{% endif %}
 						</li>
 						<li>
 							<h5>Post a comment:</h5>

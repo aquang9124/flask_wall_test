@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Wall Assignment</title>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="{{ url_for('static', filename='sass/styles.css') }}">
+</head>
+<body>
+	<nav class="navbar navbar-inverse navbar-static-top">
+		<div class="container-fluid">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="#">The Wall</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="#">Welcome {{ session['username'] }}!</a></li>
+				<li><a href="/logout">Log Out</a></li>
+			</ul>
+		</div>
+	</nav>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1">
+				<form action="/add_message/{{ session['user_id'] }}" method="post">
+					<textarea class="form-control" name="message" rows="10"></textarea>
+					<button class="btn btn-primary messaging">Add message</button>
+				</form>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1">
+				{% if messages %}
+					<ul>
+					{% for message in messages %}
+						<li>
+							<p>{{ message.username }} - {{ message.posted_date }}</p>
+							<p>{{ message.message }}</p>
+							{% if comments %}
+							<ul>
+							{% for comment in comments %}
+								<li>
+									<p>{{ comment.username }} - {{ comment.created_at }}</p>
+									<p>{{ comment.comment }}</p>
+								</li>
+							{% endfor %}
+							</ul>
+						{% endif %}
+						</li>
+						<li>
+							<h5>Post a comment:</h5>
+							<form action="/add_comment/{{ session['user_id'] }}/{{ message.message_id }}" method="post">
+								<textarea class="form-control" name="comment" rows="10"></textarea>
+								<button class="btn btn-primary messaging">Add comment</button>
+							</form>
+						</li>
+					{% endfor %}
+					</ul>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</body>
+</html>
